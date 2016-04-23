@@ -1,8 +1,9 @@
 package edu.uqac.algo.draughts.utilities;
 
-import edu.uqac.algo.draughts.utilities.Board;
 import edu.uqac.algo.draughts.exceptions.BoardTooSmallException;
-import edu.uqac.algo.draughts.utilities.Player;
+import edu.uqac.algo.draughts.players.CPU;
+import edu.uqac.algo.draughts.players.Human;
+import edu.uqac.algo.draughts.players.Player;
 
 public class Game {
     private Player white;
@@ -11,15 +12,18 @@ public class Game {
 
     public Game(int boardSize, boolean human) throws BoardTooSmallException {
         //todo make the game playable by a human
+        // ^ making it playable at all would be a nice start
         this.board = new Board(boardSize);
-        this.white = new Player(this.board.getWhitePieces(), this.board);
-        this.black = new Player(this.board.getBlackPieces(), this.board);
-        this.printRules();
-        System.out.println("--- Game initialized ---");
-        if (human) {
-            System.out.println("You play the white pawns (xs and Xs, just a reminder. I know you're not stupid, but, hey, who knows ?)");
-        }
         this.board.print();
+        // will always be a CPU cuz f* 1v1 it's always 1vCPU or just 2 CPUs playing
+        this.black = new CPU(this.board.getBlackPieces(), this.board);
+        if (human) {
+            this.white = new Human(this.board.getWhitePieces(), this.board);
+            System.out.println("You play the white pawns (xs and Xs, just a reminder. I know you're not stupid, but, hey, who knows ?)");
+        } else {
+            this.white = new CPU(this.board.getWhitePieces(), this.board);
+        }
+        System.out.println("--- Game initialized ---");
     }
 
     public void play() {
@@ -63,7 +67,16 @@ public class Game {
      */
     private boolean turn(int turnNumber) {
         //todo a lot of things, like, play a turn
-        System.out.println("Play turn " + turnNumber);
+        System.out.println("Turn " + turnNumber);
+        // lets see what happens during "a turn"
+        // 1. white move a piece
+            // a. what piece, from where, to where
+            // b. can a piece eat an other one, if so that's the only move he can make
+                // i. if he ate a piece, can he ate an other one ? if so, he have to keep on eating until he can't anymore
+            // c. when he end his turn, we remove all the eaten pieces
+            // d. check if the moved piece ended it's turn on a "promoting case" (basically just x = 0 or x = size -1)
+        // 2. black move a piece
+            // same as 1.
         return false;
     }
 }

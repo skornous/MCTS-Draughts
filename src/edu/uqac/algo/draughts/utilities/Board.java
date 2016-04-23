@@ -61,7 +61,20 @@ public class Board {
      * Print the board's state
      */
     public void print() {
+        //todo redo the horizontal axis numbers, it's ugly af
+        for (int i = 0; i < this.size / 10; i++) {
+            System.out.printf(" ");
+        }
+        System.out.printf("   "); // 3 spaces cuz of opening and closing parentheses plus the number
+        for (int i = 0; i < this.size; i++) {
+            System.out.print(" " + (i+1));
+        }
+        System.out.println();
         for (int x = this.size-1 ; x >= 0 ; x--) {
+            System.out.print("(" + (x + 1) + ")");
+            if (this.size >= 10 && x+1 < 10) {
+                System.out.printf(" ");
+            }
             for (int y = 0 ; y < this.size ; y++) {
                 Piece p = this.getPieceAtPosition(x, y);
                 if (p != null) {
@@ -85,7 +98,7 @@ public class Board {
      * @return a Piece if there is one, else null
      */
     @Nullable
-    private Piece getPieceAtPosition(int x, int y) {
+    public Piece getPieceAtPosition(int x, int y) {
         Position pos = new Position(x, y);
         for (Piece p : this.pieces) {
             if (p.getPosition().equals(pos)) return p;

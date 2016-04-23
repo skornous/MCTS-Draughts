@@ -14,6 +14,11 @@ public class Queen extends Piece {
     }
 
     @Override
+    public boolean canGoto(Position position) {
+        return false;
+    }
+
+    @Override
     public boolean canMove() {
         return false;
     }

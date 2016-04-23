@@ -1,13 +1,14 @@
-package edu.uqac.algo.draughts.utilities;
+package edu.uqac.algo.draughts.players;
 
 import edu.uqac.algo.draughts.pieces.Piece;
+import edu.uqac.algo.draughts.utilities.Board;
 
 import java.util.List;
 
-public class Player {
+public abstract class Player {
     //todo add everything the player need to play
-    private List<Piece> pieces;
-    private Board board;
+    protected List<Piece> pieces;
+    protected Board board;
 
     public Player(List<Piece> pieces, Board board) {
         this.pieces = pieces;
@@ -26,4 +27,9 @@ public class Player {
         }
         return false;
     }
+
+    // the core of the player, play your turn :O
+    public abstract void playYourTurn();
+    // better move a piece
+    public abstract void moveAPiece();
 }

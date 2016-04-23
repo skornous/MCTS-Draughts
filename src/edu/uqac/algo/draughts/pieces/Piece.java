@@ -16,6 +16,7 @@ public abstract class Piece {
     }
 
     public abstract void move();
+    public abstract boolean canGoto(Position position);
     public abstract boolean canMove();
 
     public int getX() {
