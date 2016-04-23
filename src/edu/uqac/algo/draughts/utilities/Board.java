@@ -61,7 +61,7 @@ public class Board {
      * Print the board's state
      */
     public void print() {
-        for (int x = 0 ; x < this.size ; x++) {
+        for (int x = this.size-1 ; x >= 0 ; x--) {
             for (int y = 0 ; y < this.size ; y++) {
                 Piece p = this.getPieceAtPosition(x, y);
                 if (p != null) {

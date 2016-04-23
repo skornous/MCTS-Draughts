@@ -17,7 +17,7 @@ public class Game {
         this.printRules();
         System.out.println("--- Game initialized ---");
         if (human) {
-            System.out.println("You play the white pawns (xs and Xs)");
+            System.out.println("You play the white pawns (xs and Xs, just a reminder. I know you're not stupid, but, hey, who knows ?)");
         }
         this.board.print();
     }
