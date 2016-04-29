@@ -1,9 +1,12 @@
 package edu.uqac.algo.draughts.ai;
 
-public class MCTS {
-    //todo implement the MCTS algorithm
+import edu.uqac.algo.draughts.utilities.Game;
 
-    public MCTS() {
+public class MCTS {
+    private Tree tree;
+    //todo implement the MCTS algorithm
+    public MCTS(Game game) {
+        this.tree = new Tree(game);
     }
 
     public void selection() {
@@ -18,5 +21,10 @@ public class MCTS {
     public void backPropagation() {
     }
 
-    public void playout() {}
+    public void playout() {
+        this.selection();
+        this.expansion();
+        this.simulation();
+        this.backPropagation();
+    }
 }

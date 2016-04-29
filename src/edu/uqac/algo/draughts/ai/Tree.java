@@ -9,7 +9,13 @@ public class Tree {
     private Game game;
     private int nodeCount;
 
-    public Tree() {
+    private final int randomMovesPerNode = 30;
+
+    public Tree(Game game) {
+        this.game = game;
+        this.nodeCount = 0;
+        this.rootNode = new Node(this,game,null);
+        this.currentNode = rootNode;
     }
 
     public Node getRootNode() {
@@ -43,4 +49,6 @@ public class Tree {
     public void setNodeCount(int nodeCount) {
         this.nodeCount = nodeCount;
     }
+
+    public void raiseNodeCount() { this.nodeCount++; }
 }
