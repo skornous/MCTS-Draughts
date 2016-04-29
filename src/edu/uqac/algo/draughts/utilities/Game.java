@@ -66,17 +66,20 @@ public class Game {
      * @return true if a pawn died
      */
     private boolean turn(int turnNumber) {
+        boolean death = false;
         //todo a lot of things, like, play a turn
         System.out.println("Turn " + turnNumber);
         // lets see what happens during "a turn"
         // 1. white move a piece
-            // a. what piece, from where, to where
+        death = death || this.white.playYourTurn();
+        // a. what piece, from where, to where
             // b. can a piece eat an other one, if so that's the only move he can make
                 // i. if he ate a piece, can he ate an other one ? if so, he have to keep on eating until he can't anymore
             // c. when he end his turn, we remove all the eaten pieces
             // d. check if the moved piece ended it's turn on a "promoting case" (basically just x = 0 or x = size -1)
         // 2. black move a piece
+//        this.black.playYourTurn();
             // same as 1.
-        return false;
+        return death;
     }
 }

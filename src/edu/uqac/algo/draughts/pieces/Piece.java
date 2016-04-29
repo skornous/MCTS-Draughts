@@ -2,8 +2,9 @@ package edu.uqac.algo.draughts.pieces;
 
 import edu.uqac.algo.draughts.utilities.Position;
 
+import java.util.List;
+
 public abstract class Piece {
-    //todo make them move
     //todo make them able to kill
     private Position position;
 
@@ -15,9 +16,13 @@ public abstract class Piece {
         this.position = position;
     }
 
-    public abstract void move();
     public abstract boolean canGoto(Position position);
     public abstract boolean canMove();
+    public abstract List<Position> getPossibleMoves();
+
+    public void moveTo(Position newPosition) {
+        this.setPosition(newPosition);
+    }
 
     public int getX() {
         return this.getPosition().getX();
@@ -35,4 +40,5 @@ public abstract class Piece {
     public void setPosition(Position position) {
         this.position = position;
     }
+
 }

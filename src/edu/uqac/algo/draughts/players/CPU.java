@@ -11,8 +11,8 @@ public class CPU extends Player {
     }
 
     @Override
-    public void playYourTurn() {
-
+    public boolean playYourTurn() {
+        return false;
     }
 
     @Override

@@ -17,7 +17,7 @@ public class Human extends Player {
     }
 
     @Override
-    public void playYourTurn() {
+    public boolean playYourTurn() {
         int choice;
         boolean madeAMove = false;
         try {
@@ -44,6 +44,7 @@ public class Human extends Player {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     @Override
@@ -78,6 +79,7 @@ public class Human extends Player {
 
                 if (p.canGoto(newPosition)) {
                     //todo add a lot of other verifications, cuz it ain't that simple
+                    p.moveTo(newPosition);
                 } else {
                     System.out.println("Your piece can't go there ! You're going to have to re-enter it's new location, happy now ?"
                             + " I don't care if you lose time, I'm a program, I've got all the time in the world to make your life crappy");

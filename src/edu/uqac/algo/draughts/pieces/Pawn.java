@@ -2,6 +2,11 @@ package edu.uqac.algo.draughts.pieces;
 
 import edu.uqac.algo.draughts.utilities.Position;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Pawn extends Piece {
     //todo everything... Give them a mouth and some legs (force them to eat and make them move)
     public Pawn(int x, int y) {
@@ -10,11 +15,6 @@ public class Pawn extends Piece {
 
     public Pawn(Position position) {
         super(position);
-    }
-
-    @Override
-    public void move() {
-
     }
 
     /**
@@ -40,4 +40,11 @@ public class Pawn extends Piece {
     public boolean canMove() {
         return false;
     }
+
+    @Override
+    public List<Position> getPossibleMoves() {
+        return new ArrayList<Position>();
+    }
+
+
 }

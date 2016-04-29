@@ -7,6 +7,7 @@ import edu.uqac.algo.draughts.pieces.Piece;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Board {
     private int size;
@@ -103,6 +104,11 @@ public class Board {
         for (Piece p : this.pieces) {
             if (p.getPosition().equals(pos)) return p;
         }
+        return null;
+    }
+
+    @Nullable
+    public Map<Piece, List<Position>> getAllPossibleMoves() {
         return null;
     }
 

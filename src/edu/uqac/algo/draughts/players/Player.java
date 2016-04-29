@@ -2,6 +2,7 @@ package edu.uqac.algo.draughts.players;
 
 import edu.uqac.algo.draughts.pieces.Piece;
 import edu.uqac.algo.draughts.utilities.Board;
+import edu.uqac.algo.draughts.utilities.Position;
 
 import java.util.List;
 
@@ -28,8 +29,17 @@ public abstract class Player {
         return false;
     }
 
+    public Piece getPieceAtPosition(Position pos) {
+        for (Piece p : this.pieces) {
+            if (p.getPosition().equals(pos)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
     // the core of the player, play your turn :O
-    public abstract void playYourTurn();
+    public abstract boolean playYourTurn();
     // better move a piece
     public abstract void moveAPiece();
 }
