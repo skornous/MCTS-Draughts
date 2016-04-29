@@ -11,6 +11,9 @@ public class Queen extends Piece {
         super(position);
     }
 
+    public Queen(int x, int y) {
+        super(x, y);
+    }
 
     @Override
     public boolean canGoto(Position position) {

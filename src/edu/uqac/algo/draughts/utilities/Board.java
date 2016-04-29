@@ -4,8 +4,10 @@ import com.sun.istack.internal.Nullable;
 import edu.uqac.algo.draughts.exceptions.BoardTooSmallException;
 import edu.uqac.algo.draughts.pieces.Pawn;
 import edu.uqac.algo.draughts.pieces.Piece;
+import edu.uqac.algo.draughts.pieces.Queen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +22,7 @@ public class Board {
     }
 
     public Board(int size) throws BoardTooSmallException {
-        if (size < 5) {
+        if (size < 5 || size % 2 == 1) {
             throw new BoardTooSmallException();
         }
         this.size = size;
@@ -54,7 +56,67 @@ public class Board {
     }
 
     public boolean canMove(Position start, Position end) {
-        //todo can move from start to end
+        //can move from start to end
+        Piece pieceToMove = this.getPieceAtPosition(start);
+        if (pieceToMove == null) return false;
+        Piece endPosition = this.getPieceAtPosition(end);
+        if (endPosition != null) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean canEat(Piece pieceToMove, Piece endPosition) {
+        // get direction Ne/Nw/Se/Sw
+        if (Math.abs(pieceToMove.getX() - endPosition.getX()) == 1 && Math.abs(pieceToMove.getY() - endPosition.getY()) == 1) {
+            int direction = 0;
+            if (pieceToMove.getX() < endPosition.getX()) {
+                // North
+                if (pieceToMove.getY() < endPosition.getY()) {
+                    direction = 0; // East
+                } else if (pieceToMove.getY() > endPosition.getY()) {
+                    direction = 1; // West
+                } else { // Unknown direction
+                    return false;
+                }
+            } else if (pieceToMove.getX() > endPosition.getX()) {
+                // South
+                if (pieceToMove.getY() < endPosition.getY()) {
+                    direction = 2; // East
+                } else if (pieceToMove.getY() > endPosition.getY()) {
+                    direction = 3; // West
+                } else { // Unknown direction
+                    return false;
+                }
+            } else { // Unknown direction
+                return false;
+            }
+            // get position behind the endPosition in this direction
+            Position behind;
+            switch (direction) {
+                case 0: //NE
+                    behind = new Position(endPosition.getX() + 1, endPosition.getY() + 1);
+                    break;
+                case 1: //NW
+                    behind = new Position(endPosition.getX() + 1, endPosition.getY() - 1);
+                    break;
+                case 2: //SE
+                    behind = new Position(endPosition.getX() - 1, endPosition.getY() + 1);
+                    break;
+                default: //SW
+                    behind = new Position(endPosition.getX() - 1, endPosition.getY() - 1);
+            }
+            return this.getPieceAtPosition(behind) == null;
+        }
+        return false;
+    }
+
+    public boolean eatPiece(Piece eater, Piece eaten) {
+        if (this.canEat(eater, eaten)) {
+            this.whitePieces.remove(eaten);
+            this.blackPieces.remove(eaten);
+            return this.pieces.remove(eaten);
+        }
         return false;
     }
 
@@ -100,7 +162,11 @@ public class Board {
      */
     @Nullable
     public Piece getPieceAtPosition(int x, int y) {
-        Position pos = new Position(x, y);
+        return this.getPieceAtPosition(new Position(x, y));
+    }
+
+    @Nullable
+    public Piece getPieceAtPosition(Position pos) {
         for (Piece p : this.pieces) {
             if (p.getPosition().equals(pos)) return p;
         }
@@ -108,8 +174,108 @@ public class Board {
     }
 
     @Nullable
-    public Map<Piece, List<Position>> getAllPossibleMoves() {
+    public Piece getPieceAtPositionFromList(Position pos, List<Piece> pieces) {
+        for (Piece p : pieces) {
+            if (p.getPosition().equals(pos)) return p;
+        }
         return null;
+    }
+
+    @Nullable
+    public Map<Piece, List<Position>> getAllPossibleMoves() {
+        Map<Piece, List<Position>> moves = new HashMap<Piece, List<Position>>();
+        for (Piece p : this.pieces) {
+            List<Position> filteredMoves = this.filterMoves(p.getPossibleMoves());
+            if (!filteredMoves.isEmpty()) {
+                moves.put(p, filteredMoves);
+            }
+        }
+        return moves;
+    }
+
+    @Nullable
+    public Map<Piece, List<Position>> getPossibleMoves(List<Piece> pieces) {
+        Map<Piece, List<Position>> moves = new HashMap<Piece, List<Position>>();
+        for (Piece p : pieces) {
+            List<Position> filteredMoves = this.filterMoves(p.getPossibleMoves());
+            if (!filteredMoves.isEmpty()) {
+                moves.put(p, filteredMoves);
+            }
+        }
+        return moves;
+    }
+
+    public char[][] getState() {
+        char[][] state = new char[size][size];
+
+        for (int i = 0; i < size - 1; i++) {
+            for (int j = 0; j < size - 1; j++) {
+                Piece p = this.getPieceAtPosition(i, j);
+                if (p == null) {
+                    state[i][j] = ' ';
+                } else {
+                    if (this.whitePieces.contains(p)) { // white piece
+                        if (p instanceof Pawn) { // pawn
+                            state[i][j] = 'x';
+                        } else { // queen
+                            state[i][j] = 'X';
+                        }
+                    } else { // black piece
+                        if (p instanceof Pawn) { // pawn
+                            state[i][j] = 'o';
+                        } else { // queen
+                            state[i][j] = 'O';
+                        }
+                    }
+                }
+            }
+        }
+        return state;
+    }
+
+    public void setFromState(char[][] state) {
+        // reset pieces
+        this.pieces = new ArrayList<Piece>();
+        this.whitePieces = new ArrayList<Piece>();
+        this.blackPieces = new ArrayList<Piece>();
+
+        // reset size
+        this.size = state.length;
+
+        // place pieces from state
+        for (int i = 0; i < size - 1; i++) {
+            for (int j = 0; j < size - 1; j++) {
+                if (state[i][j] == 'x') {
+                    this.whitePieces.add(new Pawn(i, j));
+                } else if (state[i][j] == 'X') {
+                    this.whitePieces.add(new Queen(i, j));
+                } else if (state[i][j] == 'o') {
+                    this.blackPieces.add(new Pawn(i, j));
+                } else if (state[i][j] == 'O') {
+                    this.blackPieces.add(new Queen(i, j));
+                }
+            }
+        }
+
+        this.pieces.addAll(this.blackPieces);
+        this.pieces.addAll(this.whitePieces);
+    }
+
+    private List<Position> filterMoves(List<Position> possibleMoves) {
+        List<Position> realisticMoves = new ArrayList<Position>();
+
+        for (Position move : possibleMoves) {
+            if (this.getPieceAtPosition(move) == null && this.isInBoard(move)) {
+                realisticMoves.add(move);
+            }
+        }
+
+        return realisticMoves;
+    }
+
+    private boolean isInBoard(Position move) {
+        return move.getX() >= 0 && move.getX() < this.size
+                && move.getY() >= 0 && move.getY() < this.size;
     }
 
     public int getSize() {

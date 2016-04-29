@@ -10,6 +10,10 @@ import java.io.InputStreamReader;
 public class Main {
 
     public static void main(String[] args) {
+        launchIAGame();
+    }
+
+    private static void launchHumanGame() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
             Game.printRules();
@@ -22,6 +26,14 @@ public class Main {
             System.err.println("Invalid Format!");
         } catch (IOException ioe) {
             ioe.printStackTrace();
+        } catch (BoardTooSmallException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void launchIAGame() {
+        try {
+            new Game().play(); // launch game
         } catch (BoardTooSmallException e) {
             e.printStackTrace();
         }

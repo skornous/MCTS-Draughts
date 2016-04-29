@@ -9,12 +9,12 @@ public class Game {
     private Player white;
     private Player black;
     private Board board;
+    private boolean debug = false;
 
     public Game(int boardSize, boolean human) throws BoardTooSmallException {
-        //todo make the game playable by a human
-        // ^ making it playable at all would be a nice start
         this.board = new Board(boardSize);
-        this.board.print();
+        if (debug)
+            this.board.print();
         // will always be a CPU cuz f* 1v1 it's always 1vCPU or just 2 CPUs playing
         this.black = new CPU(this.board.getBlackPieces(), this.board);
         if (human) {
@@ -23,11 +23,18 @@ public class Game {
         } else {
             this.white = new CPU(this.board.getWhitePieces(), this.board);
         }
-        System.out.println("--- Game initialized ---");
+        if (debug)
+            System.out.println("--- Game initialized ---");
+    }
+
+    public Game() throws BoardTooSmallException {
+        this(8, false);
     }
 
     public void play() {
-        System.out.println("Game start");
+        if (debug){
+            System.out.println("Game start");
+        }
         int turn = 1;
         // peace counter, the war ends in a drawn if no one dies for 25 turns, may peace continue forever in this game.
         int turnWithoutDeath = 0;
@@ -39,20 +46,29 @@ public class Game {
         }
 
         if (this.white.canPlay() && this.black.canPlay()) {
-            System.out.println("Game ended on a draw");
+            if (debug) {
+                System.out.println("Game ended on a draw");
+            }
         } else {
             if (!this.white.canPlay() && !this.black.canPlay()) {
-                System.out.println("No one can play yet. This developers, urg !");
+                if (debug) {
+                    System.out.println("No one can play yet. This developers, urg !");
+                }
             } else {
                 if (this.white.canPlay()) {
-                    System.out.println("White wins");
+                    if (debug) {
+                        System.out.println("White wins");
+                    }
                 } else {
-                    System.out.println("Black wins");
+                    if(debug) {
+                        System.out.println("Black wins");
+                    }
                 }
             }
         }
-
-        System.out.println("--- Game ended ---");
+        if (debug) {
+            System.out.println("--- Game ended ---");
+        }
     }
 
     public static void printRules() {
@@ -67,10 +83,10 @@ public class Game {
      */
     private boolean turn(int turnNumber) {
         boolean death = false;
-        //todo a lot of things, like, play a turn
-        System.out.println("Turn " + turnNumber);
+//        System.out.println("Turn " + turnNumber);
         // lets see what happens during "a turn"
         // 1. white move a piece
+//        System.out.println("White turn");
         death = death || this.white.playYourTurn();
         // a. what piece, from where, to where
             // b. can a piece eat an other one, if so that's the only move he can make
@@ -78,7 +94,8 @@ public class Game {
             // c. when he end his turn, we remove all the eaten pieces
             // d. check if the moved piece ended it's turn on a "promoting case" (basically just x = 0 or x = size -1)
         // 2. black move a piece
-//        this.black.playYourTurn();
+//        System.out.println("Black turn");
+        death = death || this.black.playYourTurn();
             // same as 1.
         return death;
     }

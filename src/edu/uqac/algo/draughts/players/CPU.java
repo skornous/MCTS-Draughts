@@ -16,7 +16,7 @@ public class CPU extends Player {
     }
 
     @Override
-    public void moveAPiece() {
-
+    public boolean moveAPiece() {
+        return false;
     }
 }

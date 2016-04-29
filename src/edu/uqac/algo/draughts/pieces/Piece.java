@@ -5,7 +5,6 @@ import edu.uqac.algo.draughts.utilities.Position;
 import java.util.List;
 
 public abstract class Piece {
-    //todo make them able to kill
     private Position position;
 
     public Piece(int x, int y) {
@@ -23,6 +22,7 @@ public abstract class Piece {
     public void moveTo(Position newPosition) {
         this.setPosition(newPosition);
     }
+    public boolean canGoto(int x, int y) { return this.canGoto(new Position(x, y)); }
 
     public int getX() {
         return this.getPosition().getX();

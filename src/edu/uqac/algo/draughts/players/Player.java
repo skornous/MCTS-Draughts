@@ -7,7 +7,6 @@ import edu.uqac.algo.draughts.utilities.Position;
 import java.util.List;
 
 public abstract class Player {
-    //todo add everything the player need to play
     protected List<Piece> pieces;
     protected Board board;
 
@@ -38,8 +37,12 @@ public abstract class Player {
         return null;
     }
 
+    public Piece getPieceAtPosition(int x, int y) {
+        return this.getPieceAtPosition(new Position(x, y));
+    }
+
     // the core of the player, play your turn :O
     public abstract boolean playYourTurn();
     // better move a piece
-    public abstract void moveAPiece();
+    public abstract boolean moveAPiece();
 }
