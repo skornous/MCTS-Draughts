@@ -1,20 +1,23 @@
 package edu.uqac.algo.draughts.ai;
 
+import edu.uqac.algo.draughts.utilities.Board;
 import edu.uqac.algo.draughts.utilities.Game;
+import edu.uqac.algo.draughts.utilities.Position;
 
 public class Tree {
     //todo finish the tree
     private Node rootNode;
     private Node currentNode;
+    private Board board;
     private Game game;
     private int nodeCount;
 
     private final int randomMovesPerNode = 30;
 
-    public Tree(Game game) {
-        this.game = game;
+    public Tree(Board board) {
+        this.board = board;
         this.nodeCount = 0;
-        this.rootNode = new Node(this,game,null);
+        this.rootNode = new Node(this,board.getState(),null);
         this.currentNode = rootNode;
     }
 
@@ -34,12 +37,10 @@ public class Tree {
         this.currentNode = currentNode;
     }
 
-    public Game getGame() {
-        return game;
-    }
+    public Board getBoard() { return board; }
 
-    public void setGame(Game game) {
-        this.game = game;
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     public int getNodeCount() {
@@ -50,5 +51,4 @@ public class Tree {
         this.nodeCount = nodeCount;
     }
 
-    public void raiseNodeCount() { this.nodeCount++; }
 }
